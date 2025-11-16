@@ -34,6 +34,31 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        // Mizzue-inspired color palette
+        brand: {
+          50: "#fafafa",
+          100: "#f5f5f5",
+          200: "#e5e5e5",
+          300: "#d4d4d4",
+          400: "#a3a3a3",
+          500: "#737373",
+          600: "#525252",
+          700: "#404040",
+          800: "#262626",
+          900: "#171717",
+        },
+        accent: {
+          50: "#fef3f2",
+          100: "#fee4e2",
+          200: "#fecdd3",
+          300: "#fda4af",
+          400: "#fb7185",
+          500: "#f43f5e", // Red accent for sales/discounts
+          600: "#e11d48",
+          700: "#be123c",
+          800: "#9f1239",
+          900: "#881337",
+        },
       },
       borderRadius: {
         none: "0px",

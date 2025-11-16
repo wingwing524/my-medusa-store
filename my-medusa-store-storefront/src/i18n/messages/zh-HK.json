@@ -1,0 +1,42 @@
+{
+  "common": {
+    "addToCart": "加入購物車",
+    "buyNow": "立即購買",
+    "sold": "售出",
+    "remaining": "剩餘",
+    "soldOut": "售完",
+    "saleEndsIn": "優惠結束",
+    "lowStock": "存貨不多！",
+    "original": "原價",
+    "from": "由"
+  },
+  "nav": {
+    "home": "首頁",
+    "newArrivals": "今期新品",
+    "bags": "包包",
+    "accessories": "首飾",
+    "sale": "優惠",
+    "account": "我的帳戶",
+    "cart": "購物車",
+    "search": "搜尋",
+    "favorites": "收藏"
+  },
+  "product": {
+    "addToWishlist": "加入收藏",
+    "removeFromWishlist": "移除收藏",
+    "inStock": "有貨",
+    "outOfStock": "缺貨",
+    "selectVariant": "選擇款式"
+  },
+  "account": {
+    "myAccount": "我的帳戶",
+    "orders": "訂單",
+    "profile": "個人資料",
+    "addresses": "地址",
+    "favorites": "收藏",
+    "viewFavorites": "查看和管理您的收藏產品",
+    "noFavorites": "暫無收藏",
+    "startBrowsing": "開始瀏覽並點擊愛心圖示將商品加入收藏",
+    "logout": "登出"
+  }
+}
