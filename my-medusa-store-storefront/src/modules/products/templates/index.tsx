@@ -2,9 +2,9 @@ import React, { Suspense } from "react"
 
 import ImageGallery from "@modules/products/components/image-gallery"
 import ProductActions from "@modules/products/components/product-actions"
-import ProductOnboardingCta from "@modules/products/components/product-onboarding-cta"
 import ProductTabs from "@modules/products/components/product-tabs"
-import RelatedProducts from "@modules/products/components/related-products"
+import YouMayLike from "@modules/products/components/you-may-like"
+import RecommendedCombos from "@modules/products/components/recommended-combos"
 import ProductInfo from "@modules/products/templates/product-info"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
 import { notFound } from "next/navigation"
@@ -31,38 +31,51 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
 
   return (
     <>
-      <div
-        className="content-container  flex flex-col small:flex-row small:items-start py-6 relative"
-        data-testid="product-container"
-      >
-        <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-6">
-          <ProductInfo product={product} />
-          <ProductTabs product={product} />
-        </div>
-        <div className="block w-full relative">
-          <ImageGallery images={images} />
-        </div>
-        <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-12">
-          <ProductOnboardingCta />
-          <Suspense
-            fallback={
-              <ProductActions
-                disabled={true}
-                product={product}
-                region={region}
-              />
-            }
-          >
-            <ProductActionsWrapper id={product.id} region={region} />
-          </Suspense>
+      {/* Main Product Section */}
+      <div className="content-container py-8 md:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-8 lg:gap-12">
+          {/* Left: Image Gallery */}
+          <div>
+            <ImageGallery images={images} />
+          </div>
+
+          {/* Right: Product Info & Actions */}
+          <div className="flex flex-col gap-6">
+            <ProductInfo product={product} />
+            
+            <Suspense
+              fallback={
+                <ProductActions
+                  disabled={true}
+                  product={product}
+                  region={region}
+                />
+              }
+            >
+              <ProductActionsWrapper id={product.id} region={region} />
+            </Suspense>
+          </div>
         </div>
       </div>
-      <div
-        className="content-container my-16 small:my-32"
-        data-testid="related-products-container"
-      >
+
+      {/* Product Details Tabs */}
+      <div className="border-t border-gray-200">
+        <div className="content-container py-12">
+          <ProductTabs product={product} />
+        </div>
+      </div>
+
+      {/* You May Also Like Section */}
+      <div className="bg-gray-50 py-12 md:py-16">
         <Suspense fallback={<SkeletonRelatedProducts />}>
-          <RelatedProducts product={product} countryCode={countryCode} />
+          <YouMayLike product={product} countryCode={countryCode} />
+        </Suspense>
+      </div>
+
+      {/* Recommended Combos Section */}
+      <div className="py-12 md:py-16">
+        <Suspense fallback={<div className="content-container">Loading...</div>}>
+          <RecommendedCombos product={product} countryCode={countryCode} />
         </Suspense>
       </div>
     </>

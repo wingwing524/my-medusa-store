@@ -1,38 +1,61 @@
+"use client"
+
 import { HttpTypes } from "@medusajs/types"
-import { Container } from "@medusajs/ui"
 import Image from "next/image"
+import { useState } from "react"
 
 type ImageGalleryProps = {
   images: HttpTypes.StoreProductImage[]
 }
 
 const ImageGallery = ({ images }: ImageGalleryProps) => {
+  const [selectedImage, setSelectedImage] = useState(0)
+
+  if (!images || images.length === 0) {
+    return null
+  }
+
   return (
-    <div className="flex items-start relative">
-      <div className="flex flex-col flex-1 small:mx-16 gap-y-4">
-        {images.map((image, index) => {
-          return (
-            <Container
-              key={image.id}
-              className="relative aspect-[29/34] w-full overflow-hidden bg-ui-bg-subtle"
-              id={image.id}
-            >
-              {!!image.url && (
-                <Image
-                  src={image.url}
-                  priority={index <= 2 ? true : false}
-                  className="absolute inset-0 rounded-rounded"
-                  alt={`Product image ${index + 1}`}
-                  fill
-                  sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
-                  style={{
-                    objectFit: "cover",
-                  }}
-                />
-              )}
-            </Container>
-          )
-        })}
+    <div className="flex gap-4">
+      {/* Thumbnail sidebar */}
+      <div className="flex flex-col gap-2 w-20 md:w-24">
+        {images.map((image, index) => (
+          <button
+            key={image.id}
+            onClick={() => setSelectedImage(index)}
+            className={`relative aspect-[3/4] overflow-hidden rounded-lg border-2 transition-all ${
+              selectedImage === index
+                ? 'border-gray-900'
+                : 'border-gray-200 hover:border-gray-400'
+            }`}
+          >
+            {image.url && (
+              <Image
+                src={image.url}
+                alt={`Thumbnail ${index + 1}`}
+                fill
+                className="object-cover"
+                sizes="96px"
+              />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Main image */}
+      <div className="flex-1">
+        <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100">
+          {images[selectedImage]?.url && (
+            <Image
+              src={images[selectedImage].url}
+              alt={`Product image ${selectedImage + 1}`}
+              fill
+              priority={selectedImage === 0}
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 60vw"
+            />
+          )}
+        </div>
       </div>
     </div>
   )

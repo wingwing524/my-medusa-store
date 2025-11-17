@@ -137,13 +137,22 @@ export default function ProductActions({
 
   return (
     <>
-      <div className="flex flex-col gap-y-2" ref={actionsRef}>
+      <div className="flex flex-col gap-y-6" ref={actionsRef}>
+        {/* Price */}
+        <div>
+          <ProductPrice product={product} variant={selectedVariant} />
+        </div>
+
+        {/* Variant Options */}
         <div>
           {(product.variants?.length ?? 0) > 1 && (
-            <div className="flex flex-col gap-y-4">
+            <div className="flex flex-col gap-y-6">
               {(product.options || []).map((option) => {
                 return (
                   <div key={option.id}>
+                    <label className="block text-sm font-semibold mb-3 uppercase tracking-wide">
+                      {option.title}
+                    </label>
                     <OptionSelect
                       option={option}
                       current={options[option.id]}
@@ -155,13 +164,11 @@ export default function ProductActions({
                   </div>
                 )
               })}
-              <Divider />
             </div>
           )}
         </div>
 
-        <ProductPrice product={product} variant={selectedVariant} />
-
+        {/* Add to Cart Button */}
         <Button
           onClick={handleAddToCart}
           disabled={
@@ -172,7 +179,7 @@ export default function ProductActions({
             !isValidVariant
           }
           variant="primary"
-          className="w-full h-10"
+          className="w-full h-12 bg-gray-900 text-white hover:bg-gray-800 font-semibold uppercase tracking-wide"
           isLoading={isAdding}
           data-testid="add-product-button"
         >
@@ -182,6 +189,20 @@ export default function ProductActions({
             ? "Out of stock"
             : "Add to cart"}
         </Button>
+
+        {/* Delivery Info */}
+        <div className="border-t border-gray-200 pt-6">
+          <div className="flex items-start gap-3 text-sm text-gray-600">
+            <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+            </svg>
+            <div>
+              <p className="font-medium text-gray-900">Free Delivery</p>
+              <p>On orders over $500</p>
+            </div>
+          </div>
+        </div>
+
         <MobileActions
           product={product}
           variant={selectedVariant}
