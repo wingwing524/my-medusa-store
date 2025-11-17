@@ -1,58 +1,154 @@
 import { Suspense } from "react"
+import { Bell, Heart, ShoppingBag, User } from "lucide-react"
 
 import { listRegions } from "@lib/data/regions"
+import { listCategories } from "@lib/data/categories"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
+import LanguageSwitcher from "../../../../components/LanguageSwitcher"
+import { cookies } from "next/headers"
 
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
+  const categories = await listCategories()
+  const cookieStore = await cookies()
+  const currentLocale = cookieStore.get('locale')?.value || 'en'
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
       <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex-1 basis-0 h-full flex items-center">
-            <div className="h-full">
-              <SideMenu regions={regions} />
+        <nav className="content-container flex items-center justify-between w-full h-full px-4 xl:px-8">
+          
+          {/* DESKTOP LAYOUT (≥ 1280px) */}
+          <div className="hidden xl:flex items-center justify-between w-full h-full">
+            {/* Left: Menu Button */}
+            <div className="flex items-center">
+              <SideMenu regions={regions} categories={categories} />
             </div>
-          </div>
 
-          <div className="flex items-center h-full">
-            <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
-              data-testid="nav-store-link"
-            >
-              Medusa Store
-            </LocalizedClientLink>
-          </div>
-
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
-            <div className="hidden small:flex items-center gap-x-6 h-full">
+            {/* Center: Logo */}
+            <div className="absolute left-1/2 transform -translate-x-1/2">
               <LocalizedClientLink
-                className="hover:text-ui-fg-base"
-                href="/account"
-                data-testid="nav-account-link"
+                href="/"
+                className="text-2xl font-bold tracking-tight hover:text-ui-fg-base transition-colors"
+                data-testid="nav-store-link"
               >
-                Account
+                ESHOP
               </LocalizedClientLink>
             </div>
-            <Suspense
-              fallback={
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
-                  href="/cart"
-                  data-testid="nav-cart-link"
-                >
-                  Cart (0)
-                </LocalizedClientLink>
-              }
-            >
-              <CartButton />
-            </Suspense>
+
+            {/* Right: Icons */}
+            <div className="flex items-center gap-4">
+              {/* Alert Bell */}
+              <button 
+                className="p-2 hover:text-ui-fg-base transition-colors"
+                aria-label="Notifications"
+              >
+                <Bell className="h-5 w-5" />
+              </button>
+
+              {/* Favorites */}
+              <LocalizedClientLink
+                href="/account/favorites"
+                className="p-2 hover:text-ui-fg-base transition-colors"
+                aria-label="Favorites"
+              >
+                <Heart className="h-5 w-5" />
+              </LocalizedClientLink>
+
+              {/* Cart */}
+              <Suspense
+                fallback={
+                  <LocalizedClientLink
+                    href="/cart"
+                    className="p-2 hover:text-ui-fg-base transition-colors"
+                    aria-label="Cart"
+                  >
+                    <ShoppingBag className="h-5 w-5" />
+                  </LocalizedClientLink>
+                }
+              >
+                <CartButton />
+              </Suspense>
+
+              {/* Account */}
+              <LocalizedClientLink
+                href="/account"
+                className="p-2 hover:text-ui-fg-base transition-colors"
+                aria-label="Account"
+                data-testid="nav-account-link"
+              >
+                <User className="h-5 w-5" />
+              </LocalizedClientLink>
+
+              {/* Language Switcher */}
+              <LanguageSwitcher currentLocale={currentLocale} />
+            </div>
           </div>
+
+          {/* MOBILE/TABLET LAYOUT (< 1280px) */}
+          <div className="flex xl:hidden items-center justify-between w-full h-full">
+            {/* Left: Logo */}
+            <LocalizedClientLink
+              href="/"
+              className="text-xl font-bold tracking-tight hover:text-ui-fg-base transition-colors"
+              data-testid="nav-store-link-mobile"
+            >
+              ESHOP
+            </LocalizedClientLink>
+
+            {/* Right: Icons */}
+            <div className="flex items-center gap-3">
+              {/* Alert Bell */}
+              <button 
+                className="p-2 hover:text-ui-fg-base transition-colors"
+                aria-label="Notifications"
+              >
+                <Bell className="h-5 w-5" />
+              </button>
+
+              {/* Favorites */}
+              <LocalizedClientLink
+                href="/account/favorites"
+                className="p-2 hover:text-ui-fg-base transition-colors"
+                aria-label="Favorites"
+              >
+                <Heart className="h-5 w-5" />
+              </LocalizedClientLink>
+
+              {/* Cart */}
+              <Suspense
+                fallback={
+                  <LocalizedClientLink
+                    href="/cart"
+                    className="p-2 hover:text-ui-fg-base transition-colors"
+                    aria-label="Cart"
+                  >
+                    <ShoppingBag className="h-5 w-5" />
+                  </LocalizedClientLink>
+                }
+              >
+                <CartButton />
+              </Suspense>
+
+              {/* Account */}
+              <LocalizedClientLink
+                href="/account"
+                className="p-2 hover:text-ui-fg-base transition-colors"
+                aria-label="Account"
+              >
+                <User className="h-5 w-5" />
+              </LocalizedClientLink>
+
+              {/* Menu Button */}
+              <div className="h-full">
+                <SideMenu regions={regions} categories={categories} />
+              </div>
+            </div>
+          </div>
+
         </nav>
       </header>
     </div>

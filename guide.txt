@@ -1,0 +1,20 @@
+Next Steps:
+Add Images to /public/images/:
+
+Hero images (1920x1080px)
+Category images (600x800px)
+Promo banner (1920x600px)
+Configure Metadata in Medusa Admin (localhost:9000/app):
+
+For Collections:
+
+
+{  "show_on_hero": true,  "display_order": 1,  "hero_image_url": "/images/hero-summer.jpg",  "subtitle": "New Summer Collection",  "cta_text": "Shop Now"}
+For Categories:
+
+
+{  "banner_image_url": "/images/category-handbags.jpg",  "show_on_homepage": true,  "display_order": 1}
+View the homepage at localhost:8000 to see your Charles & Keith-style store!
+
+All setup instructions are in HOMEPAGE_SETUP.md. The homepage is fully dynamic - no hardcoded products! 🎉
+
