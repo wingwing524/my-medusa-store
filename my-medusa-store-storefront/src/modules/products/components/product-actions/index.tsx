@@ -12,9 +12,6 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
 import { useRouter } from "next/navigation"
-import CountdownTimer from "../countdown-timer"
-import StockCounter from "../stock-counter"
-import WishlistButton from "../wishlist-button"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -141,16 +138,6 @@ export default function ProductActions({
   return (
     <>
       <div className="flex flex-col gap-y-2" ref={actionsRef}>
-        {/* Countdown Timer - Shows if sale_end_date exists in metadata */}
-        {product.metadata?.sale_end_date && (
-          <div className="mb-4">
-            <CountdownTimer 
-              endDate={new Date(product.metadata.sale_end_date as string)}
-              onExpire={() => console.log('Sale ended!')}
-            />
-          </div>
-        )}
-
         <div>
           {(product.variants?.length ?? 0) > 1 && (
             <div className="flex flex-col gap-y-4">
@@ -173,43 +160,28 @@ export default function ProductActions({
           )}
         </div>
 
-        <ProductPrice product={product} variant={selectedVariant} showBadge={true} />
+        <ProductPrice product={product} variant={selectedVariant} />
 
-        {/* Stock Counter - Shows sold and remaining items */}
-        {selectedVariant && (
-          <div className="my-2">
-            <StockCounter 
-              inventoryQuantity={selectedVariant.inventory_quantity || 0}
-              initialStock={product.metadata?.initial_stock as number || 100}
-            />
-          </div>
-        )}
-
-        {/* Add to Cart and Wishlist Buttons */}
-        <div className="flex gap-2">
-          <Button
-            onClick={handleAddToCart}
-            disabled={
-              !inStock ||
-              !selectedVariant ||
-              !!disabled ||
-              isAdding ||
-              !isValidVariant
-            }
-            variant="primary"
-            className="flex-1 h-10"
-            isLoading={isAdding}
-            data-testid="add-product-button"
-          >
-            {!selectedVariant && !options
-              ? "Select variant"
-              : !inStock || !isValidVariant
-              ? "Out of stock"
-              : "Add to cart"}
-          </Button>
-          <WishlistButton productId={product.id} />
-        </div>
-
+        <Button
+          onClick={handleAddToCart}
+          disabled={
+            !inStock ||
+            !selectedVariant ||
+            !!disabled ||
+            isAdding ||
+            !isValidVariant
+          }
+          variant="primary"
+          className="w-full h-10"
+          isLoading={isAdding}
+          data-testid="add-product-button"
+        >
+          {!selectedVariant && !options
+            ? "Select variant"
+            : !inStock || !isValidVariant
+            ? "Out of stock"
+            : "Add to cart"}
+        </Button>
         <MobileActions
           product={product}
           variant={selectedVariant}
