@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { cookies } from "next/headers"
 
 import { getCollectionByHandle, listCollections } from "@lib/data/collections"
 import { listRegions } from "@lib/data/regions"
@@ -71,6 +72,9 @@ export default async function CollectionPage(props: Props) {
   const params = await props.params
   const { sortBy, page } = searchParams
 
+  const cookieStore = await cookies()
+  const locale = cookieStore.get('locale')?.value || 'en'
+
   const collection = await getCollectionByHandle(params.handle).then(
     (collection: StoreCollection) => collection
   )
@@ -85,6 +89,7 @@ export default async function CollectionPage(props: Props) {
       page={page}
       sortBy={sortBy}
       countryCode={params.countryCode}
+      locale={locale}
     />
   )
 }

@@ -1,6 +1,7 @@
 import { listProducts } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
 import { HttpTypes } from "@medusajs/types"
+import { getTranslations } from 'next-intl/server'
 import Image from "next/image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
@@ -13,6 +14,7 @@ export default async function RecommendedCombos({
   product,
   countryCode,
 }: RecommendedCombosProps) {
+  const t = await getTranslations('productSections')
   const region = await getRegion(countryCode)
 
   if (!region) {
@@ -63,8 +65,8 @@ export default async function RecommendedCombos({
   return (
     <div className="content-container">
       <div className="text-center mb-8 md:mb-12">
-        <h2 className="text-2xl md:text-3xl font-bold mb-2">推薦搭配</h2>
-        <p className="text-gray-600">Recommended Combinations</p>
+        <h2 className="text-2xl md:text-3xl font-bold mb-2">{t('recommendedCombos')}</h2>
+        <p className="text-gray-600">{t('recommendedCombosSubtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -103,7 +105,7 @@ export default async function RecommendedCombos({
               href={`/products/${combo.main.handle}`}
               className="block w-full py-3 bg-gray-900 text-white text-center font-semibold rounded hover:bg-gray-800 transition-colors"
             >
-              Shop the Look
+              {t('shopTheLook')}
             </LocalizedClientLink>
           </div>
         ))}

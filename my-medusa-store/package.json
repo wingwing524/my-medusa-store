@@ -25,7 +25,15 @@
     "@medusajs/admin-sdk": "2.11.3",
     "@medusajs/cli": "2.11.3",
     "@medusajs/framework": "2.11.3",
-    "@medusajs/medusa": "2.11.3"
+    "@medusajs/medusa": "2.11.3",
+    "@tiptap/extension-color": "^3.11.0",
+    "@tiptap/extension-image": "^3.11.0",
+    "@tiptap/extension-link": "^3.11.0",
+    "@tiptap/extension-text-align": "^3.11.0",
+    "@tiptap/extension-text-style": "^3.11.0",
+    "@tiptap/react": "^3.11.0",
+    "@tiptap/starter-kit": "^3.11.0",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@medusajs/test-utils": "2.11.3",

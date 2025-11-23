@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { cookies } from "next/headers"
 
 import { getCategoryByHandle, listCategories } from "@lib/data/categories"
 import { listRegions } from "@lib/data/regions"
@@ -68,6 +69,9 @@ export default async function CategoryPage(props: Props) {
   const params = await props.params
   const { sortBy, page } = searchParams
 
+  const cookieStore = await cookies()
+  const locale = cookieStore.get('locale')?.value || 'en'
+
   const productCategory = await getCategoryByHandle(params.category)
 
   if (!productCategory) {
@@ -80,6 +84,7 @@ export default async function CategoryPage(props: Props) {
       sortBy={sortBy}
       page={page}
       countryCode={params.countryCode}
+      locale={locale}
     />
   )
 }

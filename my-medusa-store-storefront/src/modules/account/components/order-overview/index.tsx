@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@medusajs/ui"
+import { useTranslations } from 'next-intl'
 
 import OrderCard from "../order-card"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"

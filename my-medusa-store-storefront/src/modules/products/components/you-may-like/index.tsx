@@ -1,6 +1,7 @@
 import { listProducts } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
 import { HttpTypes } from "@medusajs/types"
+import { getTranslations } from 'next-intl/server'
 import ProductPreview from "../product-preview"
 
 type YouMayLikeProps = {
@@ -12,6 +13,7 @@ export default async function YouMayLike({
   product,
   countryCode,
 }: YouMayLikeProps) {
+  const t = await getTranslations('productSections')
   const region = await getRegion(countryCode)
 
   if (!region) {
@@ -51,8 +53,8 @@ export default async function YouMayLike({
   return (
     <div className="content-container">
       <div className="text-center mb-8 md:mb-12">
-        <h2 className="text-2xl md:text-3xl font-bold mb-2">猜你喜歡</h2>
-        <p className="text-gray-600">You May Also Like</p>
+        <h2 className="text-2xl md:text-3xl font-bold mb-2">{t('youMayLike')}</h2>
+        <p className="text-gray-600">{t('youMayLikeSubtitle')}</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">

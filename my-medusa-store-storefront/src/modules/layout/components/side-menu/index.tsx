@@ -6,16 +6,22 @@ import { useToggleState } from "@medusajs/ui"
 import { Fragment, useState } from "react"
 import { ChevronDown, ChevronRight, LogIn, Heart, Bell, HelpCircle } from "lucide-react"
 import { HttpTypes } from "@medusajs/types"
+import { useTranslations } from 'next-intl'
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CountrySelect from "../country-select"
+import LanguageSwitcher from "../../../../components/LanguageSwitcher"
+import { getTranslatedName } from "@lib/util/translations"
 
 interface SideMenuProps {
   regions: HttpTypes.StoreRegion[] | null
   categories?: HttpTypes.StoreProductCategory[]
+  customer?: HttpTypes.StoreCustomer | null
+  currentLocale: string
 }
 
-const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
+const SideMenu = ({ regions, categories = [], customer, currentLocale }: SideMenuProps) => {
+  const t = useTranslations('sideMenu')
   const toggleState = useToggleState()
   const [expandedCategories, setExpandedCategories] = useState<string[]>([])
 
@@ -46,7 +52,7 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                   data-testid="nav-menu-button"
                   className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base"
                 >
-                  Menu
+                  {t('menu')}
                 </Popover.Button>
               </div>
 
@@ -83,7 +89,7 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                   <div className="flex flex-col h-full">
                     {/* Header */}
                     <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                      <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
+                      <h2 className="text-lg font-semibold text-gray-900">{t('menu')}</h2>
                       <button
                         onClick={close}
                         data-testid="close-menu-button"
@@ -95,6 +101,39 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
 
                     {/* Scrollable Content */}
                     <div className="flex-1 overflow-y-auto">
+                      {/* Featured Collections */}
+                      <div className="p-4 border-b border-gray-200">
+                        <ul className="space-y-1">
+                          <li>
+                            <LocalizedClientLink
+                              href="/collections/new-arrivals"
+                              className="flex items-center py-2 px-3 text-gray-900 hover:bg-gray-100 rounded transition-colors font-medium"
+                              onClick={close}
+                            >
+                              {t('newArrivals')}
+                            </LocalizedClientLink>
+                          </li>
+                          <li>
+                            <LocalizedClientLink
+                              href="/collections/sale"
+                              className="flex items-center py-2 px-3 text-red-600 hover:bg-red-50 rounded transition-colors font-medium"
+                              onClick={close}
+                            >
+                              {t('sale')}
+                            </LocalizedClientLink>
+                          </li>
+                          <li>
+                            <LocalizedClientLink
+                              href="/collections/best-sellers"
+                              className="flex items-center py-2 px-3 text-gray-900 hover:bg-gray-100 rounded transition-colors font-medium"
+                              onClick={close}
+                            >
+                              {t('bestSellers')}
+                            </LocalizedClientLink>
+                          </li>
+                        </ul>
+                      </div>
+
                       {/* Categories */}
                       <div className="p-4">
                         <ul className="space-y-1">
@@ -114,7 +153,7 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                                       className="flex-1 flex items-center justify-between py-2 px-3 text-gray-900 hover:bg-gray-100 rounded transition-colors text-left"
                                     >
                                       <span className="font-medium">
-                                        {category.name}
+                                        {getTranslatedName(category, currentLocale)}
                                       </span>
                                       {isExpanded ? (
                                         <ChevronDown className="w-4 h-4" />
@@ -128,7 +167,7 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                                       className="flex-1 py-2 px-3 text-gray-900 hover:bg-gray-100 rounded transition-colors font-medium"
                                       onClick={close}
                                     >
-                                      {category.name}
+                                      {getTranslatedName(category, currentLocale)}
                                     </LocalizedClientLink>
                                   )}
                                 </div>
@@ -143,7 +182,7 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                                           className="block py-2 px-3 text-gray-700 hover:bg-gray-100 rounded transition-colors text-sm"
                                           onClick={close}
                                         >
-                                          {child.name}
+                                          {getTranslatedName(child, currentLocale)}
                                         </LocalizedClientLink>
                                       </li>
                                     ))}
@@ -159,7 +198,7 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                       <div className="px-4 py-4 border-t border-gray-200">
                         <div className="flex flex-col gap-y-3">
                           <span className="text-sm font-medium text-gray-900">
-                            Shipping to:
+                            {t('shippingTo')}
                           </span>
                           <CountrySelect
                             toggleState={toggleState}
@@ -167,19 +206,31 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                           />
                         </div>
                       </div>
+
+                      {/* Language Switcher */}
+                      <div className="px-4 py-4 border-t border-gray-200">
+                        <div className="flex flex-col gap-y-3">
+                          <span className="text-sm font-medium text-gray-900">
+                            {t('language')}
+                          </span>
+                          <LanguageSwitcher currentLocale={currentLocale} />
+                        </div>
+                      </div>
                     </div>
 
                     {/* Bottom Section */}
                     <div className="border-t border-gray-200 p-4">
-                      {/* Sign In Button */}
-                      <LocalizedClientLink
-                        href="/account"
-                        onClick={close}
-                        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-gray-900 text-white hover:bg-gray-800 rounded-md transition-colors mb-4"
-                      >
-                        <LogIn className="w-4 h-4" />
-                        <span className="font-medium">Sign In / Join Us</span>
-                      </LocalizedClientLink>
+                      {/* Sign In Button - Only show if not logged in */}
+                      {!customer && (
+                        <LocalizedClientLink
+                          href="/account"
+                          onClick={close}
+                          className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-gray-900 text-white hover:bg-gray-800 rounded-md transition-colors mb-4"
+                        >
+                          <LogIn className="w-4 h-4" />
+                          <span className="font-medium">{t('signInJoinUs')}</span>
+                        </LocalizedClientLink>
+                      )}
 
                       {/* Action Grid */}
                       <div className="grid grid-cols-3 gap-2">
@@ -189,7 +240,7 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                           className="flex flex-col items-center justify-center gap-2 py-3 hover:bg-gray-100 rounded transition-colors"
                         >
                           <Heart className="w-5 h-5 text-gray-700" />
-                          <span className="text-xs text-gray-700">Favorites</span>
+                          <span className="text-xs text-gray-700">{t('favorites')}</span>
                         </LocalizedClientLink>
 
                         <LocalizedClientLink
@@ -198,7 +249,7 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                           className="flex flex-col items-center justify-center gap-2 py-3 hover:bg-gray-100 rounded transition-colors"
                         >
                           <Bell className="w-5 h-5 text-gray-700" />
-                          <span className="text-xs text-gray-700">Alerts</span>
+                          <span className="text-xs text-gray-700">{t('alerts')}</span>
                         </LocalizedClientLink>
 
                         <LocalizedClientLink
@@ -207,7 +258,7 @@ const SideMenu = ({ regions, categories = [] }: SideMenuProps) => {
                           className="flex flex-col items-center justify-center gap-2 py-3 hover:bg-gray-100 rounded transition-colors"
                         >
                           <HelpCircle className="w-5 h-5 text-gray-700" />
-                          <span className="text-xs text-gray-700">FAQ</span>
+                          <span className="text-xs text-gray-700">{t('help')}</span>
                         </LocalizedClientLink>
                       </div>
                     </div>

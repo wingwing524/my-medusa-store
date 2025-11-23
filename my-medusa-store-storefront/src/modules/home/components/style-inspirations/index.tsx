@@ -1,40 +1,44 @@
+"use client"
+
 import Image from "next/image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-
-const styleInspirations = [
-  {
-    id: '1',
-    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=800&fit=crop&q=80',
-    title: 'Casual Chic',
-    tags: ['#DailyLook', '#Minimalist']
-  },
-  {
-    id: '2',
-    image: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=800&fit=crop&q=80',
-    title: 'Office Style',
-    tags: ['#WorkWear', '#Professional']
-  },
-  {
-    id: '3',
-    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=800&fit=crop&q=80',
-    title: 'Weekend Vibes',
-    tags: ['#Casual', '#Comfort']
-  },
-  {
-    id: '4',
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=800&fit=crop&q=80',
-    title: 'Evening Elegance',
-    tags: ['#Elegant', '#NightOut']
-  }
-]
+import { useTranslations } from 'next-intl'
 
 export default function StyleInspirations() {
+  const t = useTranslations('homepage')
+  
+  const styleInspirations = [
+    {
+      id: '1',
+      image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=800&fit=crop&q=80',
+      title: t('casualChic'),
+      tags: ['#DailyLook', '#Minimalist']
+    },
+    {
+      id: '2',
+      image: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=800&fit=crop&q=80',
+      title: t('officeStyle'),
+      tags: ['#WorkWear', '#Professional']
+    },
+    {
+      id: '3',
+      image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=800&fit=crop&q=80',
+      title: t('weekendVibes'),
+      tags: ['#Casual', '#Comfort']
+    },
+    {
+      id: '4',
+      image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=800&fit=crop&q=80',
+      title: t('eveningElegance'),
+      tags: ['#Elegant', '#NightOut']
+    }
+  ]
   return (
     <div className="py-12 md:py-16">
       <div className="content-container">
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold mb-2">穿搭靈感圖鑑</h2>
-          <p className="text-gray-600">Style Inspirations</p>
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">{t('styleInspirations')}</h2>
+          <p className="text-gray-600">{t('styleInspirationsSubtitle')}</p>
         </div>
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -71,12 +75,12 @@ export default function StyleInspirations() {
           ))}
         </div>
         
-        <div className="text-center mt-8 md:mt-12">
+        <div className="text-center mt-8">
           <LocalizedClientLink
             href="/store"
             className="inline-block px-8 py-3 bg-gray-900 text-white font-semibold rounded hover:bg-gray-800 transition-colors"
           >
-            Explore More Styles
+            {t('exploreMoreStyles')}
           </LocalizedClientLink>
         </div>
       </div>

@@ -8,17 +8,20 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
+import { getTranslatedName, getTranslatedDescription } from "@lib/util/translations"
 
 export default function CategoryTemplate({
   category,
   sortBy,
   page,
   countryCode,
+  locale = "en",
 }: {
   category: HttpTypes.StoreProductCategory
   sortBy?: SortOptions
   page?: string
   countryCode: string
+  locale?: string
 }) {
   const pageNumber = page ? parseInt(page) : 1
   const sort = sortBy || "created_at"
@@ -52,16 +55,16 @@ export default function CategoryTemplate({
                   href={`/categories/${parent.handle}`}
                   data-testid="sort-by-link"
                 >
-                  {parent.name}
+                  {getTranslatedName(parent, locale)}
                 </LocalizedClientLink>
                 /
               </span>
             ))}
-          <h1 data-testid="category-page-title">{category.name}</h1>
+          <h1 data-testid="category-page-title">{getTranslatedName(category, locale)}</h1>
         </div>
         {category.description && (
           <div className="mb-8 text-base-regular">
-            <p>{category.description}</p>
+            <p>{getTranslatedDescription(category, locale)}</p>
           </div>
         )}
         {category.category_children && (
@@ -70,7 +73,7 @@ export default function CategoryTemplate({
               {category.category_children?.map((c) => (
                 <li key={c.id}>
                   <InteractiveLink href={`/categories/${c.handle}`}>
-                    {c.name}
+                    {getTranslatedName(c, locale)}
                   </InteractiveLink>
                 </li>
               ))}

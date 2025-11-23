@@ -6,9 +6,11 @@ import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
 import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
+import AddToFavorites from "@modules/products/components/add-to-favorites"
 import { isEqual } from "lodash"
 import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
+import { useTranslations } from 'next-intl'
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
 import { useRouter } from "next/navigation"
@@ -17,6 +19,7 @@ type ProductActionsProps = {
   product: HttpTypes.StoreProduct
   region: HttpTypes.StoreRegion
   disabled?: boolean
+  customer?: any
 }
 
 const optionsAsKeymap = (
@@ -31,6 +34,7 @@ const optionsAsKeymap = (
 export default function ProductActions({
   product,
   disabled,
+  customer,
 }: ProductActionsProps) {
   const router = useRouter()
   const pathname = usePathname()
@@ -135,6 +139,9 @@ export default function ProductActions({
     setIsAdding(false)
   }
 
+  const t = useTranslations('common')
+  const tp = useTranslations('product')
+
   return (
     <>
       <div className="flex flex-col gap-y-6" ref={actionsRef}>
@@ -169,26 +176,34 @@ export default function ProductActions({
         </div>
 
         {/* Add to Cart Button */}
-        <Button
-          onClick={handleAddToCart}
-          disabled={
-            !inStock ||
-            !selectedVariant ||
-            !!disabled ||
-            isAdding ||
-            !isValidVariant
-          }
-          variant="primary"
-          className="w-full h-12 bg-gray-900 text-white hover:bg-gray-800 font-semibold uppercase tracking-wide"
-          isLoading={isAdding}
-          data-testid="add-product-button"
-        >
-          {!selectedVariant && !options
-            ? "Select variant"
-            : !inStock || !isValidVariant
-            ? "Out of stock"
-            : "Add to cart"}
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            onClick={handleAddToCart}
+            disabled={
+              !inStock ||
+              !selectedVariant ||
+              !!disabled ||
+              isAdding ||
+              !isValidVariant
+            }
+            variant="primary"
+            className="flex-1 h-12 bg-gray-900 text-white hover:bg-gray-800 font-semibold uppercase tracking-wide"
+            isLoading={isAdding}
+            data-testid="add-product-button"
+          >
+            {!selectedVariant && !options
+              ? t('selectVariant')
+              : !inStock || !isValidVariant
+              ? t('outOfStock')
+              : t('addToCart')}
+          </Button>
+          
+          <AddToFavorites 
+            productId={product.id!} 
+            variantId={selectedVariant?.id}
+            customer={customer}
+          />
+        </div>
 
         {/* Delivery Info */}
         <div className="border-t border-gray-200 pt-6">
@@ -197,8 +212,8 @@ export default function ProductActions({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
             </svg>
             <div>
-              <p className="font-medium text-gray-900">Free Delivery</p>
-              <p>On orders over $500</p>
+              <p className="font-medium text-gray-900">{tp('freeDelivery')}</p>
+              <p>{tp('freeDeliveryDesc')}</p>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { Bell, Heart, ShoppingBag, User } from "lucide-react"
 
 import { listRegions } from "@lib/data/regions"
 import { listCategories } from "@lib/data/categories"
+import { retrieveCustomer } from "@lib/data/customer"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
@@ -13,11 +14,12 @@ import { cookies } from "next/headers"
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
   const categories = await listCategories()
+  const customer = await retrieveCustomer()
   const cookieStore = await cookies()
   const currentLocale = cookieStore.get('locale')?.value || 'en'
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
+    <div className="sticky top-0 inset-x-0 z-40 group">
       <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
         <nav className="content-container flex items-center justify-between w-full h-full px-4 xl:px-8">
           
@@ -25,7 +27,7 @@ export default async function Nav() {
           <div className="hidden xl:flex items-center justify-between w-full h-full">
             {/* Left: Menu Button */}
             <div className="flex items-center">
-              <SideMenu regions={regions} categories={categories} />
+              <SideMenu regions={regions} categories={categories} customer={customer} currentLocale={currentLocale} />
             </div>
 
             {/* Center: Logo */}
@@ -144,7 +146,7 @@ export default async function Nav() {
 
               {/* Menu Button */}
               <div className="h-full">
-                <SideMenu regions={regions} categories={categories} />
+                <SideMenu regions={regions} categories={categories} customer={customer} currentLocale={currentLocale} />
               </div>
             </div>
           </div>

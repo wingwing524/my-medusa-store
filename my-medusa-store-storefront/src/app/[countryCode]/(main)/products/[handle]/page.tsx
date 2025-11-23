@@ -4,6 +4,7 @@ import { listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
 import ProductTemplate from "@modules/products/templates"
 import { HttpTypes } from "@medusajs/types"
+import { cookies } from "next/headers"
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>
@@ -102,6 +103,8 @@ export default async function ProductPage(props: Props) {
   const params = await props.params
   const region = await getRegion(params.countryCode)
   const searchParams = await props.searchParams
+  const cookieStore = await cookies()
+  const locale = cookieStore.get('locale')?.value || 'en'
 
   const selectedVariantId = searchParams.v_id
 
@@ -126,6 +129,7 @@ export default async function ProductPage(props: Props) {
       region={region}
       countryCode={params.countryCode}
       images={images}
+      locale={locale}
     />
   )
 }

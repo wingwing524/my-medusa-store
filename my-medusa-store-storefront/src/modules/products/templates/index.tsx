@@ -17,6 +17,7 @@ type ProductTemplateProps = {
   region: HttpTypes.StoreRegion
   countryCode: string
   images: HttpTypes.StoreProductImage[]
+  locale: string
 }
 
 const ProductTemplate: React.FC<ProductTemplateProps> = ({
@@ -24,6 +25,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
   region,
   countryCode,
   images,
+  locale,
 }) => {
   if (!product || !product.id) {
     return notFound()
@@ -41,7 +43,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
 
           {/* Right: Product Info & Actions */}
           <div className="flex flex-col gap-6">
-            <ProductInfo product={product} />
+            <ProductInfo product={product} locale={locale} />
             
             <Suspense
               fallback={

@@ -9,6 +9,7 @@ import {
 } from "@headlessui/react"
 import { Fragment, useEffect, useMemo, useState } from "react"
 import ReactCountryFlag from "react-country-flag"
+import { ChevronDown } from "lucide-react"
 
 import { StateType } from "@lib/hooks/use-toggle-state"
 import { useParams, usePathname } from "next/navigation"
@@ -27,10 +28,7 @@ type CountrySelectProps = {
 }
 
 const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
-  const [current, setCurrent] = useState<
-    | { country: string | undefined; region: string; label: string | undefined }
-    | undefined
-  >(undefined)
+  const [current, setCurrent] = useState<CountryOption | null>(null)
 
   const { countryCode } = useParams()
   const currentPath = usePathname().split(`/${countryCode}`)[1]
@@ -53,80 +51,74 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
   useEffect(() => {
     if (countryCode) {
       const option = options?.find((o) => o?.country === countryCode)
-      setCurrent(option)
+      setCurrent(option || null)
     }
   }, [options, countryCode])
 
   const handleChange = (option: CountryOption) => {
     updateRegion(option.country, currentPath)
-    close()
   }
 
   return (
-    <div>
+    <div className="w-full">
       <Listbox
-        as="span"
         onChange={handleChange}
-        defaultValue={
-          countryCode
-            ? options?.find((o) => o?.country === countryCode)
-            : undefined
-        }
+        value={current ?? undefined}
       >
-        <ListboxButton className="py-1 w-full">
-          <div className="txt-compact-small flex items-start gap-x-2">
-            <span>Shipping to:</span>
-            {current && (
-              <span className="txt-compact-small flex items-center gap-x-2">
-                {/* @ts-ignore */}
-                <ReactCountryFlag
-                  svg
-                  style={{
-                    width: "16px",
-                    height: "16px",
-                  }}
-                  countryCode={current.country ?? ""}
-                />
-                {current.label}
-              </span>
-            )}
-          </div>
-        </ListboxButton>
-        <div className="flex relative w-full min-w-[320px]">
-          <Transition
-            show={state}
-            as={Fragment}
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <ListboxOptions
-              className="absolute -bottom-[calc(100%-36px)] left-0 xsmall:left-auto xsmall:right-0 max-h-[442px] overflow-y-scroll z-[900] bg-white drop-shadow-md text-small-regular uppercase text-black no-scrollbar rounded-rounded w-full"
-              static
+        {({ open }) => (
+          <>
+            <ListboxButton className="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-300 rounded text-sm text-gray-900 hover:border-gray-400 transition-colors">
+              {current ? (
+                <span className="flex items-center gap-2">
+                  {/* @ts-ignore */}
+                  <ReactCountryFlag
+                    svg
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                    }}
+                    countryCode={current.country ?? ""}
+                  />
+                  <span className="font-medium">{current.label}</span>
+                </span>
+              ) : (
+                <span className="text-gray-500">Select region</span>
+              )}
+              <ChevronDown className={`w-4 h-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+            </ListboxButton>
+            <Transition
+              as={Fragment}
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
             >
-              {options?.map((o, index) => {
-                return (
+              <ListboxOptions className="absolute left-4 right-4 mt-2 max-h-60 overflow-y-auto bg-white border border-gray-200 rounded shadow-lg z-10">
+                {options?.map((o, index) => (
                   <ListboxOption
                     key={index}
                     value={o}
-                    className="py-2 hover:bg-gray-200 px-3 cursor-pointer flex items-center gap-x-2"
+                    className={({ active, selected }) =>
+                      `px-4 py-3 cursor-pointer flex items-center gap-3 ${
+                        active ? 'bg-gray-100' : ''
+                      } ${selected ? 'bg-gray-50 font-medium' : ''}`
+                    }
                   >
                     {/* @ts-ignore */}
                     <ReactCountryFlag
                       svg
                       style={{
-                        width: "16px",
-                        height: "16px",
+                        width: "20px",
+                        height: "20px",
                       }}
                       countryCode={o?.country ?? ""}
-                    />{" "}
-                    {o?.label}
+                    />
+                    <span className="text-sm text-gray-900">{o?.label}</span>
                   </ListboxOption>
-                )
-              })}
-            </ListboxOptions>
-          </Transition>
-        </div>
+                ))}
+              </ListboxOptions>
+            </Transition>
+          </>
+        )}
       </Listbox>
     </div>
   )

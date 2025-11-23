@@ -4,33 +4,36 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-
-const placeholderSlides = [
-  {
-    id: '1',
-    title: 'Welcome to ESHOP',
-    subtitle: 'Discover Premium Bags & Accessories',
-    image: 'https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=1920&h=1080&fit=crop&q=80',
-    link: '/store'
-  },
-  {
-    id: '2',
-    title: 'New Arrivals',
-    subtitle: 'Explore Our Latest Collection',
-    image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=1920&h=1080&fit=crop&q=80',
-    link: '/store'
-  },
-  {
-    id: '3',
-    title: 'Special Offers',
-    subtitle: 'Limited Time Deals',
-    image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=1920&h=1080&fit=crop&q=80',
-    link: '/store'
-  }
-]
+import { useTranslations } from 'next-intl'
 
 const Hero = () => {
+  const t = useTranslations('homepage')
+  const tc = useTranslations('common')
   const [currentSlide, setCurrentSlide] = useState(0)
+
+  const placeholderSlides = [
+    {
+      id: '1',
+      title: t('heroWelcome'),
+      subtitle: t('heroWelcomeDesc'),
+      image: 'https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=1920&h=1080&fit=crop&q=80',
+      link: '/store'
+    },
+    {
+      id: '2',
+      title: t('heroNewArrivals'),
+      subtitle: t('heroNewArrivalsDesc'),
+      image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=1920&h=1080&fit=crop&q=80',
+      link: '/store'
+    },
+    {
+      id: '3',
+      title: t('heroSpecialOffers'),
+      subtitle: t('heroSpecialOffersDesc'),
+      image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=1920&h=1080&fit=crop&q=80',
+      link: '/store'
+    }
+  ]
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -76,7 +79,7 @@ const Hero = () => {
               href={slide.link}
               className="px-8 py-3 bg-white text-gray-900 font-semibold rounded hover:bg-gray-100 transition-colors"
             >
-              Shop Now
+              {tc('shopNow')}
             </LocalizedClientLink>
           </div>
         </div>

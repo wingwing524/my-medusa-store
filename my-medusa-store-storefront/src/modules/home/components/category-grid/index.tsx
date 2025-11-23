@@ -1,16 +1,20 @@
+"use client"
+
 import Image from "next/image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-
-const placeholderCategories = [
-  { id: '1', name: 'Handbags', image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=800&fit=crop&q=80' },
-  { id: '2', name: 'Wallets', image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=600&h=800&fit=crop&q=80' },
-  { id: '3', name: 'Shoes', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop&q=80' },
-  { id: '4', name: 'Accessories', image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=600&h=800&fit=crop&q=80' },
-  { id: '5', name: 'Backpacks', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=800&fit=crop&q=80' },
-  { id: '6', name: 'Clutches', image: 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&h=800&fit=crop&q=80' }
-]
+import { useTranslations } from 'next-intl'
 
 export default function CategoryGrid() {
+  const t = useTranslations('categories')
+  
+  const placeholderCategories = [
+    { id: '1', name: t('handbags'), image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=800&fit=crop&q=80' },
+    { id: '2', name: t('wallets'), image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=600&h=800&fit=crop&q=80' },
+    { id: '3', name: t('shoes'), image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop&q=80' },
+    { id: '4', name: t('accessories'), image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=600&h=800&fit=crop&q=80' },
+    { id: '5', name: t('backpacks'), image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=800&fit=crop&q=80' },
+    { id: '6', name: t('clutches'), image: 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&h=800&fit=crop&q=80' }
+  ]
   return (
     <div className="py-12 md:py-16">
       <div className="content-container">
