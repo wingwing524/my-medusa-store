@@ -20,7 +20,7 @@ export const PATCH = async (req: MedusaRequest, res: MedusaResponse) => {
 
   const banner = await promotionalBannerService.updatePromotionalBanners({
     id: req.params.id,
-    ...req.body,
+    ...(req.body as any),
   })
 
   res.json({ banner })

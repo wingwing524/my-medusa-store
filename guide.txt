@@ -1,20 +1,296 @@
-Next Steps:
-Add Images to /public/images/:
+Given your stack (Medusa backend + Next.js storefront + images + custom domain) and your preference for nice DX, here’s what I’d recommend:
 
-Hero images (1920x1080px)
-Category images (600x800px)
-Promo banner (1920x600px)
-Configure Metadata in Medusa Admin (localhost:9000/app):
+Recommended stack for you
+Core recommendation:
 
-For Collections:
+Medusa + Postgres on Railway
+Next.js storefront on Vercel
+Images on Cloudflare R2
+Domain from Cloudflare / Namecheap
+
+This is essentially my earlier Option B, tuned to your preferences.
+Rough monthly cost (for ~500 users/day)
 
 
-{  "show_on_hero": true,  "display_order": 1,  "hero_image_url": "/images/hero-summer.jpg",  "subtitle": "New Summer Collection",  "cta_text": "Shop Now"}
-For Categories:
+Railway (Medusa backend + Postgres + traffic) → ≈ US$12–13 / month
 
 
-{  "banner_image_url": "/images/category-handbags.jpg",  "show_on_homepage": true,  "display_order": 1}
-View the homepage at localhost:8000 to see your Charles & Keith-style store!
+Vercel (Next.js, Hobby) → US$0 (your 75k pageviews + bandwidth fit in free tier)
 
-All setup instructions are in HOMEPAGE_SETUP.md. The homepage is fully dynamic - no hardcoded products! 🎉
 
+Cloudflare R2 (product images, ~5 GB storage, modest ops) → ≈ US$0.20 / month
+
+
+Domain (.com, via Cloudflare / Namecheap etc.) → ≈ US$1–1.5 / month
+
+
+👉 Total ballpark: ~US$14–15/month
+(for a real, always-on shop with nice DX)
+Not the absolute cheapest possible, but very good value for how easy it will be to manage.
+
+How deployment will look in practice
+1. Medusa backend on Railway
+
+
+Repo
+
+
+Put your Medusa backend in its own GitHub repo (or a monorepo, Railway can handle both).
+
+
+
+
+Create service on Railway
+
+
+“New Project” → “Deploy from GitHub” → pick your Medusa repo.
+
+
+Select the appropriate start command (e.g. yarn start or medusa start).
+
+
+
+
+Postgres
+
+
+Add a Postgres plugin/service in the same Railway project.
+
+
+Railway gives you a DATABASE_URL – plug that into Medusa’s env.
+
+
+
+
+Env vars
+
+
+Add things like:
+
+
+DATABASE_URL
+
+
+REDIS_URL (if you use Redis)
+
+
+JWT_SECRET, COOKIE_SECRET
+
+
+storage config (see next step)
+
+
+
+
+
+
+Auto-deploy
+
+
+Set the deploy trigger to “Auto deploy on push to main” (or your prod branch).
+
+
+Done: every push → build → deploy.
+
+
+
+
+2. Image storage on Cloudflare R2
+
+
+Create an R2 bucket
+
+
+e.g. myshop-images.
+
+
+
+
+Set up public access
+
+
+Either use R2’s public bucket URL or put it behind a custom domain (e.g. media.myshop.com) via Cloudflare DNS.
+
+
+
+
+Configure Medusa file service
+
+
+Use the S3-compatible API settings for R2:
+
+
+R2_ACCESS_KEY_ID
+
+
+R2_SECRET_ACCESS_KEY
+
+
+R2_ENDPOINT (R2 S3 endpoint)
+
+
+R2_BUCKET
+
+
+
+
+Install/configure the corresponding Medusa file service (S3 adapter pointing to R2).
+
+
+
+
+Result
+
+
+Medusa will upload product images to R2.
+
+
+Frontend just loads images from https://media.myshop.com/... (or the R2 public URL).
+
+
+
+
+3. Next.js storefront on Vercel
+
+
+Repo
+
+
+Your storefront in a GitHub repo (can be the same monorepo as Medusa or separate).
+
+
+
+
+Connect to Vercel
+
+
+Import the repo on Vercel → it will auto-detect Next.js.
+
+
+
+
+Env vars
+
+
+Set:
+
+
+NEXT_PUBLIC_API_URL → the Railway Medusa URL (later, something like https://api.myshop.com)
+
+
+Any other keys you need (e.g. Stripe publishable key).
+
+
+
+
+
+
+Auto-deploy
+
+
+Enable auto deploy on push for your main branch.
+
+
+You’ll get preview deployments per branch automatically.
+
+
+
+
+
+Domain wiring (example)
+Assume you register myshop.com at Cloudflare:
+
+
+Root / storefront
+
+
+On Vercel, add a custom domain myshop.com.
+
+
+Vercel will tell you what DNS records to set (either NS or A/CNAME).
+
+
+Result: https://myshop.com → Next.js storefront.
+
+
+
+
+API subdomain
+
+
+On Railway, add a custom domain api.myshop.com in the project’s settings.
+
+
+Railway gives you a CNAME target; set api.myshop.com → that CNAME in Cloudflare DNS.
+
+
+Result: https://api.myshop.com → Medusa backend.
+
+
+
+
+Media subdomain (images)
+
+
+In Cloudflare, create media.myshop.com pointing to R2 (either via Cloudflare’s R2 custom domain feature or using a CNAME to the R2 hostname).
+
+
+Result: https://media.myshop.com → Cloudflare R2 bucket.
+
+
+
+
+Then in your code:
+
+
+Medusa returns image URLs like https://media.myshop.com/products/xxx.jpg.
+
+
+Next.js displays them; Vercel just proxies to the browser.
+
+
+
+If you want even simpler (all-in Railway)
+If you really want everything in one dashboard:
+
+
+Host Medusa + Next.js both on Railway:
+
+
+1 service for Medusa API (with Postgres plugin).
+
+
+1 service for Next.js SSR app (or static build via a Node server).
+
+
+
+
+Keep Cloudflare R2 for images.
+
+
+Domain DNS:
+
+
+myshop.com → Next.js service on Railway
+
+
+api.myshop.com → Medusa service on Railway
+
+
+media.myshop.com → R2
+
+
+
+
+Cost will be a bit closer to the Render-type numbers (because you’re running two Node services 24/7 on Railway), but still reasonable. You lose Vercel’s very nice preview/deploy features, though.
+
+If you tell me:
+
+
+whether your Medusa & Next.js are in one repo or two, and
+
+
+which variant you prefer (Railway+Vercel vs all Railway),
+
+
+I can sketch the exact services you’d create on Railway + env vars list so you can literally follow and get it live.

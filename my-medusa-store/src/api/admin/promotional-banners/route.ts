@@ -21,7 +21,7 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
     "promotionalBannerModuleService"
   )
 
-  const banner = await promotionalBannerService.createPromotionalBanners(req.body)
+  const banner = await promotionalBannerService.createPromotionalBanners(req.body as any)
 
   res.json({ banner })
 }

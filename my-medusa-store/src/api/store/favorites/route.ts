@@ -1,9 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import FavoriteService from "../../../modules/favorite/service"
 
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import FavoriteService from "../../../modules/favorite/service"
-
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   // Extract token from authorization header
   const authHeader = req.headers.authorization as string
@@ -57,7 +54,7 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
     return res.status(401).json({ message: "Unauthorized" })
   }
 
-  const { product_id, variant_id } = req.body
+  const { product_id, variant_id } = req.body as { product_id: string; variant_id?: string }
 
   if (!product_id) {
     return res.status(400).json({ message: "product_id is required" })

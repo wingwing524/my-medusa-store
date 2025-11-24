@@ -20,6 +20,6 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
 
 export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
   const pageModuleService: PageModuleService = req.scope.resolve("pageModuleService")
-  const page = await pageModuleService.createPages(req.body)
+  const page = await pageModuleService.createPages(req.body as any)
   res.json({ page })
 }
