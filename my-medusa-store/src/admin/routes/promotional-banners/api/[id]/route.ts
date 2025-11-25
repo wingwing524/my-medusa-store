@@ -20,7 +20,7 @@ export async function PATCH(
   const promotionalBannerService: PromotionalBannerService = req.scope.resolve("promotional_bannerService")
   const { id } = req.params
   
-  const banner = await promotionalBannerService.updateBanner(id, req.body)
+  const banner = await promotionalBannerService.updateBanner(id, req.body as any)
 
   res.json({ banner })
 }
