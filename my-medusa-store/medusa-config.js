@@ -1,4 +1,5 @@
 const { loadEnv, defineConfig } = require('@medusajs/framework/utils')
+const path = require('path')
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
@@ -15,15 +16,15 @@ module.exports = defineConfig({
   },
   modules: [
     {
-      resolve: "./src/modules/page",
+      resolve: path.join(__dirname, "src/modules/page"),
       options: {},
     },
     {
-      resolve: "./src/modules/promotional-banner",
+      resolve: path.join(__dirname, "src/modules/promotional-banner"),
       options: {},
     },
     {
-      resolve: "./src/modules/favorite",
+      resolve: path.join(__dirname, "src/modules/favorite"),
       options: {},
     },
   ],
