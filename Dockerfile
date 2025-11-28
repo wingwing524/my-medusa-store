@@ -2,21 +2,27 @@ FROM node:20
 
 WORKDIR /app
 
-# Copy everything from my-medusa-store folder
+# Copy backend from subfolder
 COPY my-medusa-store/. .
 
-# Install dependencies
-RUN npm install
+# Ensure production build environment
+ENV NODE_ENV=production
+
+# Install deps including optional (SWC); rebuild native binding
+RUN npm cache clean --force \
+	&& npm install --include=optional \
+	&& npm rebuild @swc/core --force
 
 # Build the application (outputs to .medusa/server)
 RUN npm run build
 
-# Install production dependencies in the build output
+# Install production deps in the build output
 WORKDIR /app/.medusa/server
-RUN npm install --omit=dev
+RUN npm install --omit=dev --include=optional \
+	&& npm rebuild @swc/core --force
 
 # Expose port
 EXPOSE 9000
 
-# Start command (run migrations then start)
+# Run migrations then start
 CMD ["sh", "-c", "npx medusa db:migrate && node index.js"]
