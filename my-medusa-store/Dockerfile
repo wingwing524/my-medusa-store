@@ -1,18 +1,21 @@
-FROM node:20-alpine
+FROM node:20
 
 WORKDIR /app
 
-# Copy everything
+# Copy backend source
 COPY . .
 
 # Install dependencies
 RUN npm install
 
-# Build the application
+# Build the application (outputs to .medusa/server)
 RUN npm run build
 
-# Expose port
+# Install production dependencies in the build output dir
+WORKDIR /app/.medusa/server
+RUN npm install --omit=dev
+
 EXPOSE 9000
 
-# Start command
-CMD ["npm", "start"]
+# Run migrations then start the server
+CMD ["sh", "-c", "npx medusa db:migrate && node index.js"]
