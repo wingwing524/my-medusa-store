@@ -1,7 +1,8 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import PageModuleService from "../../../modules/page/service"
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
-  const pageModuleService = req.scope.resolve("pageModuleService") as any
+  const pageModuleService: PageModuleService = req.scope.resolve("pageModuleService")
   const locale = (req.query.locale as string) || 'en'
   
   const [pages] = await pageModuleService.listAndCountPages(
