@@ -1,5 +1,5 @@
 [build]
-buildCommand = "npm run build && ls -la .medusa/server"
+buildCommand = "echo '=== Checking files ===' && pwd && ls -la && echo '=== medusa-config.ts content ===' && cat medusa-config.ts && echo '=== package.json scripts ===' && cat package.json | grep -A 5 scripts && echo '=== Running build ===' && npm run build && echo '=== Checking .medusa ===' && ls -la .medusa/server || echo 'No .medusa/server created'"
 
 [deploy]
 startCommand = "cd .medusa/server && npm install --omit=dev && npm run predeploy && NODE_ENV=production npm run start"
