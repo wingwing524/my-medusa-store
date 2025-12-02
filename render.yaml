@@ -36,6 +36,13 @@ services:
         value: shared
     healthCheckPath: /health
 
+  # Redis Service
+  - type: redis
+    name: medusa-redis
+    plan: starter
+    region: singapore
+    maxmemoryPolicy: allkeys-lru
+
 databases:
   # PostgreSQL Database
   - name: medusa-db
@@ -43,9 +50,3 @@ databases:
     user: medusa
     plan: starter
     region: singapore
-
-  # Redis Instance
-  - name: medusa-redis
-    plan: starter
-    region: singapore
-    maxmemoryPolicy: allkeys-lru
