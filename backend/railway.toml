@@ -1,7 +1,7 @@
 [build]
-buildCommand = "echo '=== PWD after install ===' && pwd && ls -la && echo '=== Running build ===' && npm run build && echo '=== PWD after build ===' && pwd && ls -la .medusa/server"
+buildCommand = "npm run build"
 
 [deploy]
-startCommand = "echo '=== Starting deployment ===' && pwd && ls -la && cd .medusa/server && echo '=== Inside .medusa/server ===' && pwd && ls -la && npm install && echo '=== Running migrations ===' && npm run predeploy && echo '=== Starting server ===' && NODE_ENV=production npm run start"
+startCommand = "cd .medusa/server && npm install --omit=dev && npm run predeploy && NODE_ENV=production npm run start"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10

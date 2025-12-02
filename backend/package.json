@@ -13,7 +13,6 @@
     "medusa"
   ],
   "scripts": {
-    "prebuild": "echo '=== Compiling TypeScript modules ===' && tsc --build src/modules/page/tsconfig.json src/modules/promotional-banner/tsconfig.json src/modules/favorite/tsconfig.json || echo 'TypeScript compilation skipped'",
     "build": "medusa build",
     "seed": "medusa exec ./src/scripts/seed.ts",
     "start": "medusa start",
