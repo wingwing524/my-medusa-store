@@ -17,13 +17,13 @@ echo ========================================
 echo.
 
 REM Start backend in new window
-start "Medusa Backend" cmd /k "cd /d %~dp0my-medusa-store && npm run dev"
+start "Medusa Backend" cmd /k "cd /d %~dp0backend && npm run dev"
 
 REM Wait 3 seconds for backend to initialize
 timeout /t 3 /nobreak > nul
 
 REM Start storefront in new window
-start "Next.js Storefront" cmd /k "cd /d %~dp0my-medusa-store-storefront && npm run dev"
+start "Next.js Storefront" cmd /k "cd /d %~dp0frontend && npm run dev"
 
 echo.
 echo ========================================
