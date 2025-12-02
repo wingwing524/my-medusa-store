@@ -21,15 +21,15 @@ module.exports = defineConfig({
   },
   modules: [
     {
-      resolve: "./.medusa/server/src/modules/page",
+      resolve: "./src/modules/page",
       options: {},
     },
     {
-      resolve: "./.medusa/server/src/modules/promotional-banner",
+      resolve: "./src/modules/promotional-banner",
       options: {},
     },
     {
-      resolve: "./.medusa/server/src/modules/favorite",
+      resolve: "./src/modules/favorite",
       options: {},
     },
   ],
