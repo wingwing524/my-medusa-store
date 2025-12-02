@@ -18,7 +18,16 @@ export async function POST(
 ) {
   const promotionalBannerService: PromotionalBannerService = req.scope.resolve("promotional_bannerService")
   
-  const banner = await promotionalBannerService.createBanner(req.body)
+  const banner = await promotionalBannerService.createBanner(req.body as {
+    message: string
+    message_zh_tw?: string
+    start_date: Date
+    end_date: Date
+    is_active?: boolean
+    background_color?: string
+    text_color?: string
+    link_url?: string
+  })
 
   res.json({ banner })
 }

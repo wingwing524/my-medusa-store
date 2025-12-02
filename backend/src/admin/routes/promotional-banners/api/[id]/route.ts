@@ -20,7 +20,16 @@ export async function PATCH(
   const promotionalBannerService: PromotionalBannerService = req.scope.resolve("promotional_bannerService")
   const { id } = req.params
   
-  const banner = await promotionalBannerService.updateBanner(id, req.body)
+  const banner = await promotionalBannerService.updateBanner(id, req.body as Partial<{
+    message: string
+    message_zh_tw: string
+    start_date: Date
+    end_date: Date
+    is_active: boolean
+    background_color: string
+    text_color: string
+    link_url: string
+  }>)
 
   res.json({ banner })
 }
