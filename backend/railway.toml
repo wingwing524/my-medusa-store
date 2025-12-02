@@ -1,12 +1,7 @@
 [build]
-builder = "NIXPACKS"
-
-[build.nixpacksPlan]
-phases.setup.nixPkgs = ["nodejs_20", "python3"]
-phases.install.cmds = ["npm install"]
-phases.build.cmds = ["npm run build"]
+buildCommand = "echo '=== PWD after install ===' && pwd && ls -la && echo '=== Running build ===' && npm run build && echo '=== PWD after build ===' && pwd && ls -la .medusa/server"
 
 [deploy]
-startCommand = "cd .medusa/server && npm install && npm run predeploy && NODE_ENV=production npm run start"
+startCommand = "echo '=== Starting deployment ===' && pwd && ls -la && cd .medusa/server && echo '=== Inside .medusa/server ===' && pwd && ls -la && npm install && echo '=== Running migrations ===' && npm run predeploy && echo '=== Starting server ===' && NODE_ENV=production npm run start"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
