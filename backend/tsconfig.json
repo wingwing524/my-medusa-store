@@ -11,6 +11,8 @@
     "declaration": false,
     "sourceMap": false,
     "inlineSourceMap": true,
+    "outDir": "./.medusa/server",
+    "rootDir": "./",
     "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
@@ -21,13 +23,13 @@
     "swc": true
   },
   "include": [
-    "src",
-    "medusa-config.ts",
-    "instrumentation.ts"
+    "**/*",
+    ".medusa/types/*"
   ],
   "exclude": [
     "node_modules",
-    ".medusa",
+    ".medusa/server",
+    ".medusa/admin",
     ".cache"
   ]
 }
